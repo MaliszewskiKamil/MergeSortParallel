@@ -8,7 +8,7 @@ public class MergeSort {
 
     public MergeSort(){}
 
-    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+    public static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
         // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
         assert isSorted(a, lo, mid);
         assert isSorted(a, mid+1, hi);

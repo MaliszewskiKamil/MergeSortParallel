@@ -24,7 +24,9 @@ public class Main {
 		}
 		long start = System.currentTimeMillis();
 		System.out.println("Starting mergesort");
-		MergeSort.sort(data_set);
+		//MergeSort.sort(data_set);
+		ParallelMergeSort pms = new ParallelMergeSort();
+		pms.parallelMergeSort(data_set,4);
 		System.out.println("Mergesort finished");
 		long finish = System.currentTimeMillis();
 		long timeElapsed = finish - start;
@@ -35,8 +37,14 @@ public class Main {
 
 		System.out.println("Time taken:\nMinutes: " + minutes + "\nSeconds: "+ seconds);
 
-
-
+		System.out.println(data_set[0]);
+		System.out.println(data_set[10]);
+		System.out.println(data_set[20]);
+		System.out.println(data_set[30]);
+		System.out.println(data_set[ARRAY_SIZE-500]);
+		System.out.println(data_set[ARRAY_SIZE-330]);
+		System.out.println(data_set[ARRAY_SIZE-50]);
+		System.out.println(data_set[ARRAY_SIZE-1]);
 
 	}
 }
