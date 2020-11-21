@@ -6,45 +6,77 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
 	private static final int SEED = 931353283;
-	private static final int ARRAY_SIZE = 60000000;
+	private static final int ARRAY_SMALL = 8000000;
+	private static final int ARRAY_MEDIUM = 16000000;
+	private static final int ARRAY_BIG = 32000000;
+	private static final int ARRAY_LARGE = 648000000;
 	private static final int MAX_RANDOM_NUMBER = 100000000;
+
+
+	private static Integer[] data_set_small  = new Integer[ARRAY_SMALL];
+	private static Integer[] data_set_medium  = new Integer[ARRAY_MEDIUM];
+	private static Integer[] data_set_big  = new Integer[ARRAY_BIG];
+	private static Integer[] data_set_large  = new Integer[ARRAY_LARGE];
+	private static Random random = new Random(SEED);
+
     public static void main(String[] args) {
 
 
-		Random random = new Random(SEED);
 
+		int cores = Runtime.getRuntime().availableProcessors();
+		System.out.println(cores);
 
-		Integer[] data_set  = new Integer[ARRAY_SIZE];
-		for (int i =0; i<data_set.length; i++){
-			data_set[i] = random.nextInt(MAX_RANDOM_NUMBER);
-		}
-		System.out.println("First 30 integers in the dataset: ");
-		for (int i = 0; i<30; i++){
-			System.out.println(data_set[i]);
-		}
-		long start = System.currentTimeMillis();
-		System.out.println("Starting mergesort");
-		//MergeSort.sort(data_set);
-		ParallelMergeSort pms = new ParallelMergeSort();
-		pms.parallelMergeSort(data_set,4);
-		System.out.println("Mergesort finished");
-		long finish = System.currentTimeMillis();
-		long timeElapsed = finish - start;
-
-
-		int seconds = (int) (timeElapsed / 1000) % 60 ;
-		int minutes = (int) ((timeElapsed / (1000*60)) % 60);
-
-		System.out.println("Time taken:\nMinutes: " + minutes + "\nSeconds: "+ seconds);
-
-		System.out.println(data_set[0]);
-		System.out.println(data_set[10]);
-		System.out.println(data_set[20]);
-		System.out.println(data_set[30]);
-		System.out.println(data_set[ARRAY_SIZE-500]);
-		System.out.println(data_set[ARRAY_SIZE-330]);
-		System.out.println(data_set[ARRAY_SIZE-50]);
-		System.out.println(data_set[ARRAY_SIZE-1]);
+		prepareData();
+		testDataset(data_set_big, cores);
 
 	}
+
+	private static void prepareData(){
+		System.out.println("***PREPARING DATASETS***");
+		int progress = ARRAY_SMALL;
+		for (int i =0; i<data_set_large.length; i++){
+//			if(i<data_set_small.length)
+//				data_set_small[i] = random.nextInt(MAX_RANDOM_NUMBER);
+//			if(i<data_set_medium.length)
+//				data_set_medium[i] = random.nextInt(MAX_RANDOM_NUMBER);
+			if(i<data_set_big.length)
+				data_set_big[i] = random.nextInt(MAX_RANDOM_NUMBER);
+//			if(i<data_set_large.length)
+//				data_set_large[i] = random.nextInt(MAX_RANDOM_NUMBER);
+			if(i>progress-2){
+				System.out.println("Finished dataset of size: "+progress);
+				progress = progress*2;
+			}
+		}
+	}
+
+	private static void testDataset(Integer[] dataset, int cores){
+    	String message;
+    	if(cores == 0) {
+			message = "-----------STARTING MERGE SORT---------------";
+		} else {
+    		message = "-------STARTING PARALLEL MERGE SORT----------";
+		}
+
+
+		System.out.println("---------------------------------------------");
+		System.out.println(message);
+		System.out.println("Testing the dataset of size: "+ dataset.length);
+		Integer[] dataset_to_sort = dataset;
+		System.out.println("Starting timer");
+		long start = System.currentTimeMillis();
+		if(cores == 0) {
+			MergeSort.sort(dataset_to_sort);
+		} else {
+			ParallelMergeSort.parallelMergeSort(dataset_to_sort, cores);
+		}
+		long finish = System.currentTimeMillis();
+		System.out.println("Mergesort finished");
+		long timeElapsed = finish - start;
+		int seconds = (int) (timeElapsed / 1000) % 60 ;
+		int minutes = (int) ((timeElapsed / (1000*60)) % 60);
+		System.out.println("Time taken:\nMinutes: " + minutes + "\nSeconds: "+ seconds);
+		System.out.println("---------------------------------------------");
+	}
+
 }

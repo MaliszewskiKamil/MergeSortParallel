@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class ParallelMergeSort {
 
-    public void parallelMergeSort(Integer[] numbers, int numOfThreads) {
+    public static void parallelMergeSort(Integer[] numbers, int numOfThreads) {
 
         if (numOfThreads <= 1) {
             MergeSort.sort(numbers); // SEQUENTIAL !!!!
@@ -32,7 +32,7 @@ public class ParallelMergeSort {
         mergeArray(leftSubarray, rightSubarray, numbers);
     }
 
-    private Thread mergeSortThread(Integer[] numbers, int numOfThreads) {
+    private static Thread mergeSortThread(Integer[] numbers, int numOfThreads) {
 
         return new Thread() {
             @Override

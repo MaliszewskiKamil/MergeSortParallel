@@ -15,7 +15,6 @@ import static org.junit.Assert.assertEquals;
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class ParallelMergeSortTests {
     protected static Integer[] data_set;
-    static int SEED = 34215345;
     protected static int cores;
     protected static ParallelMergeSort parallelMergeSort;
 
